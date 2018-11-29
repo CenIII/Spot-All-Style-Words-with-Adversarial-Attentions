@@ -21,6 +21,12 @@ if __name__ == '__main__':
     tokenizer = spacy.load('en')
     dictionary = Dictionary()
     dictionary.add_word('<pad>')  # add padding word
+
+    def proc_token(tk):
+        if tk.replace('.','',1).isdigit():
+            return "_num_"
+        return tk
+
     with open(args.output, 'w') as fout:
         pool = []
         with open(args.input) as csvfile:
@@ -38,7 +44,7 @@ if __name__ == '__main__':
             words = tokenizer(' '.join(item['text'].split()))
             data = {
                 'label': int(item['stars']) - 1,
-                'text': list(map(lambda x: x.text.lower(), words))
+                'text': list(map(lambda x: proc_token(x.text.lower()), words))
             }
             fout.write(json.dumps(data) + '\n')
             for item in data['text']:
