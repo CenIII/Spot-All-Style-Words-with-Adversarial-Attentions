@@ -70,6 +70,11 @@ def train(epoch_number, logger):
     model.train()
     total_loss = 0
     total_pure_loss = 0  # without the penalization term
+    # custom lr
+    if epoch_number>0 and epoch_number%8==0:
+        for param_group in optimizer.param_groups:
+                param_group['lr'] = param_group['lr'] * 0.5
+
     start_time = time.time()
 
     numIters = int(len(data_train) / args.batch_size)
@@ -135,9 +140,9 @@ def train(epoch_number, logger):
             torch.save(model, f)
         f.close()
         best_val_loss = val_loss
-    else:  # if loss doesn't go down, divide the learning rate by 5.
-        for param_group in optimizer.param_groups:
-            param_group['lr'] = param_group['lr'] * 0.2
+    # else:  # if loss doesn't go down, divide the learning rate by 5.
+    #     for param_group in optimizer.param_groups:
+    #         param_group['lr'] = param_group['lr'] * 0.2
     if not best_acc or acc > best_acc:
         with open(args.save[:-3]+'.best_acc.pt', 'wb') as f:
             torch.save(model, f)
