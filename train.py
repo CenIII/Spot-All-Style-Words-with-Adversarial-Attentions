@@ -101,7 +101,7 @@ def train(epoch_number, logger):
         total_loss += loss.data
         cur_ls = loss.data.item()
 
-        qdar.set_postfix(loss= '{:5.4f}'.format(cur_p_ls), pure_loss='{:5.4f}'.format(cur_ls))
+        qdar.set_postfix(loss= '{:5.4f}'.format(cur_ls), pure_loss='{:5.4f}'.format(cur_p_ls))
 
         if batch % args.log_interval == 0 and batch > 0:
             elapsed = time.time() - start_time
