@@ -39,10 +39,7 @@ wordlist = []
 # 				wordlist += line.split(' ')
 # 				line = f.readline()
 
-dictionary = Dictionary(path='./Data/dict1000')
-wordlist += dictionary.idx2word
-
-dictionary = Dictionary(path='./Data/dict10000')
+dictionary = Dictionary(path='./dict')
 wordlist += dictionary.idx2word
 
 wordlist.append('<unk>')
@@ -63,10 +60,12 @@ for word in vocabs:
 		wordDict[word] = cnt
 		cnt += 1
 	else:
-		# wastewords.append(word)
+		wastewords.append(word)
 		word2vec.append(np.random.uniform(-1,1,300))
 		wordDict[word] = cnt
 		cnt += 1
+
+print(len(wastewords))
 
 word2vec = np.array(word2vec)
 # with open('./word2vec', "wb") as fp:   #Pickling

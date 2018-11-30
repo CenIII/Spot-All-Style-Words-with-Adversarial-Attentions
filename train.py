@@ -40,8 +40,8 @@ def package(data, volatile=False):
         else:
             for j in range(maxlen - len(dat[i])):
                 dat[i].append(dictionary.word2idx['<pad>'])
-    dat = Variable(torch.LongTensor(dat), volatile=volatile)
-    targets = Variable(torch.LongTensor(targets), volatile=volatile)
+    dat = Variable(torch.LongTensor(dat), requires_grad=volatile)
+    targets = Variable(torch.LongTensor(targets), requires_grad=volatile)
     return dat.t(), targets
 
 
@@ -50,18 +50,19 @@ def evaluate():
     model.eval()  # turn on the eval() switch to disable dropout
     total_loss = 0
     total_correct = 0
-    for batch, i in enumerate(range(0, len(data_val), args.batch_size)):
-        data, targets = package(data_val[i:min(len(data_val), i+args.batch_size)], volatile=True)
-        if args.cuda:
-            data = data.cuda()
-            targets = targets.cuda()
-        hidden = model.init_hidden(data.size(1))
-        output, attention = model.forward(data, hidden)
-        output_flat = output.view(data.size(1), -1)
-        total_loss += criterion(output_flat, targets).data
-        prediction = torch.max(output_flat, 1)[1]
-        total_correct += torch.sum((prediction == targets).float())
-    return total_loss[0] / (len(data_val) // args.batch_size), total_correct.data[0] / len(data_val)
+    with torch.no_grad():
+        for batch, i in enumerate(range(0, len(data_val), args.batch_size)):
+            data, targets = package(data_val[i:min(len(data_val), i+args.batch_size)], volatile=True)
+            if args.cuda:
+                data = data.cuda()
+                targets = targets.cuda()
+            hidden = model.init_hidden(data.size(1))
+            output, attention = model.forward(data, hidden)
+            output_flat = output.view(data.size(1), -1)
+            total_loss += criterion(output_flat, targets).data
+            prediction = torch.max(output_flat, 1)[1]
+            total_correct += torch.sum((prediction == targets).float())
+    return total_loss[0] / (len(data_val) // args.batch_size), total_correct.data.item() / len(data_val)
 
 
 def train(epoch_number, logger):
