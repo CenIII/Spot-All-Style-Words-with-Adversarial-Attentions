@@ -148,9 +148,9 @@ def train(epoch_number, logger):
             torch.save(model, f)
         f.close()
         best_acc = acc
-    with open(args.save[:-3]+'.epoch-{:02d}.pt'.format(epoch_number), 'wb') as f:
-        torch.save(model, f)
-    f.close()
+    # with open(args.save[:-3]+'.epoch-{:02d}.pt'.format(epoch_number), 'wb') as f:
+    #     torch.save(model, f)
+    # f.close()
 
 
 if __name__ == '__main__':
