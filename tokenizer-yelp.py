@@ -29,14 +29,14 @@ if __name__ == '__main__':
 
     with open(args.output, 'w') as fout:
         pool = []
-        with open(args.input) as csvfile:
+        with open(args.input,encoding='utf-8') as csvfile:
             readCSV = csv.DictReader(csvfile, delimiter=',')
             for item in readCSV:
                 pool.append(item)
 
         random.shuffle(pool)
 
-        numIters = 1000#len(pool)
+        numIters = len(pool)
         qdar = tqdm.tqdm(range(numIters),total= numIters,ascii=True)
         for i in qdar:
             # for item in pool:
