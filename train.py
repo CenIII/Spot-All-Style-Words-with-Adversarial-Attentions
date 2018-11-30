@@ -40,8 +40,8 @@ def package(data, volatile=False):
         else:
             for j in range(maxlen - len(dat[i])):
                 dat[i].append(dictionary.word2idx['<pad>'])
-    dat = Variable(torch.LongTensor(dat), requires_grad=volatile)
-    targets = Variable(torch.LongTensor(targets), requires_grad=volatile)
+    dat = Variable(torch.LongTensor(dat), requires_grad=False)
+    targets = Variable(torch.LongTensor(targets), requires_grad=False)
     return dat.t(), targets
 
 
