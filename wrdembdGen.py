@@ -39,7 +39,11 @@ wordlist = []
 # 				wordlist += line.split(' ')
 # 				line = f.readline()
 
-dictionary = Dictionary(path='./dict')
+dictionary = Dictionary(path='./traindict')
+wordlist += dictionary.idx2word
+dictionary = Dictionary(path='./valdict')
+wordlist += dictionary.idx2word
+dictionary = Dictionary(path='./testdict')
 wordlist += dictionary.idx2word
 
 wordlist.append('<unk>')
@@ -69,10 +73,10 @@ print(len(wastewords))
 
 word2vec = np.array(word2vec)
 # with open('./word2vec', "wb") as fp:   #Pickling
-np.save('word2vec.npy',word2vec)
+np.save('./Data/data_sins/word2vec.npy',word2vec)
 # with open('./wordDict', "wb") as fp:   #Pickling
 # 	pickle.dump(wordDict, fp)
-with open('./Data/wordDict', 'w') as fout:  # save dictionary for fast next process
+with open('./Data/data_sins/wordDict', 'w') as fout:  # save dictionary for fast next process
     fout.write(json.dumps(list(vocabs)) + '\n')
     fout.close()
 

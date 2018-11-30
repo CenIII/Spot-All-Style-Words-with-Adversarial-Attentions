@@ -123,9 +123,11 @@ def train(epoch_number, logger):
 #            exit()
     evaluate_start_time = time.time()
     val_loss, acc = evaluate()
+
     print('-' * 89)
-    fmt = '| evaluation | time: {:5.2f}s | valid loss (pure) {:5.4f} | Acc {:8.4f}'
-    print(fmt.format((time.time() - evaluate_start_time), val_loss, acc))
+    fmt = '| evaluation | time: {:5.2f}s | valid loss (pure) {:5.4f} | Acc {:8.4f}'.format((time.time() - evaluate_start_time), val_loss, acc)
+    print(fmt)
+    logger.write(fmt)
     print('-' * 89)
     # Save the model, if the validation loss is the best we've seen so far.
     if not best_val_loss or val_loss < best_val_loss:
@@ -186,7 +188,9 @@ if __name__ == '__main__':
     if args.cuda:
         model = model.cuda()
 
+    logger = open(args.log,'w')
     print(args)
+    logger.write(str(args))
     I = Variable(torch.zeros(args.batch_size, args.attention_hops, args.attention_hops))
     for i in range(args.batch_size):
         for j in range(args.attention_hops):
@@ -205,7 +209,7 @@ if __name__ == '__main__':
     print('Begin to load data.')
     data_train = open(args.train_data).readlines()
     data_val = open(args.val_data).readlines()
-    logger = open(args.log,'w')
+    
     try:
         for epoch in range(args.epochs):
             train(epoch,logger)
