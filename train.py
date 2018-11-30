@@ -62,7 +62,7 @@ def evaluate():
             total_loss += criterion(output_flat, targets).data
             prediction = torch.max(output_flat, 1)[1]
             total_correct += torch.sum((prediction == targets).float())
-    return total_loss[0] / (len(data_val) // args.batch_size), total_correct.data.item() / len(data_val)
+    return total_loss.item() / (len(data_val) // args.batch_size), total_correct.data.item() / len(data_val)
 
 
 def train(epoch_number, logger):
