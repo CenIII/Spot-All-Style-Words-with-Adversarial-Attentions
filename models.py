@@ -120,8 +120,8 @@ class Classifier(nn.Module):
             self.fc = nn.Linear(config['nhid'] * 2 * config['attention-hops'], config['nfc'])
         else:
             raise Exception('Error when initializing Classifier')
-        self.drop = nn.Dropout(config['dropout'])
-        self.tanh = nn.Tanh()
+        # self.drop = nn.Dropout(config['dropout'])
+        # self.tanh = nn.Tanh()
         self.pred = nn.Linear(config['nfc'], config['class-number'])
         self.dictionary = config['dictionary']
 #        self.init_weights()
@@ -134,9 +134,10 @@ class Classifier(nn.Module):
 
     def forward(self, inp, hidden):
         outp, attention = self.encoder.forward(inp, hidden)
-        outp = outp.view(outp.size(0), -1)
-        fc = self.tanh(self.fc(self.drop(outp)))
-        pred = self.pred(self.drop(fc))
+        # outp = outp.view(outp.size(0), -1)
+        # fc = self.tanh(self.fc(self.drop(outp)))
+        fc = torch.mean(outp,2)
+        pred = self.pred(fc)#self.drop(fc))
         if type(self.encoder) == BiLSTM:
             attention = None
         return pred, attention
