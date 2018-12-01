@@ -122,7 +122,7 @@ class Classifier(nn.Module):
             raise Exception('Error when initializing Classifier')
         # self.drop = nn.Dropout(config['dropout'])
         # self.tanh = nn.Tanh()
-        self.pred = nn.Linear(config['nfc'], config['class-number'])
+        self.pred = nn.Linear(config['nfc']*2, config['class-number'])
         self.dictionary = config['dictionary']
 #        self.init_weights()
 
