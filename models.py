@@ -97,7 +97,10 @@ class SelfAttentiveEncoder(nn.Module):
         penalized_alphas = alphas + (
             -10000 * (concatenated_inp == self.dictionary.word2idx['<pad>']).float())
             # [bsz, hop, len] + [bsz, hop, len]
-        alphas = F.softmax(penalized_alphas.view(-1, size[1]),dim=1)  # [bsz*hop, len]
+        zzz=penalized_alphas.view(-1, size[1])
+        m,n = torch.max(zzz,1)
+
+        alphas = F.softmax(zzz/m[:,None],dim=1)  # [bsz*hop, len]
         alphas = alphas.view(size[0], self.attention_hops, size[1])  # [bsz, hop, len]
         return torch.bmm(alphas, outp), alphas
 
