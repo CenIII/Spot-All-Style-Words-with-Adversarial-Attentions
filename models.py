@@ -94,13 +94,13 @@ class SelfAttentiveEncoder(nn.Module):
         hbar = self.tanh(self.ws1(self.drop(compressed_embeddings)))  # [bsz*len, attention-unit]
         alphas = self.ws2(hbar).view(size[0], size[1], -1)  # [bsz, len, hop]
         alphas = torch.transpose(alphas, 1, 2).contiguous()  # [bsz, hop, len]
-        penalized_alphas = alphas + (
-            -10000 * (concatenated_inp == self.dictionary.word2idx['<pad>']).float())
+        penalized_alphas = alphas# + (
+        #     -10000 * (concatenated_inp == self.dictionary.word2idx['<pad>']).float())
             # [bsz, hop, len] + [bsz, hop, len]
-        zzz=penalized_alphas.view(-1, size[1])
-        m,n = torch.max(zzz,1)
+        # zzz=penalized_alphas.view(-1, size[1])
+        # m,n = torch.max(zzz,1)
 
-        alphas = F.softmax(zzz/m[:,None],dim=1)  # [bsz*hop, len]
+        alphas = F.softmax(penalized_alphas.view(-1, size[1]),dim=1)  # [bsz*hop, len]zzz/m[:,None]
         alphas = alphas.view(size[0], self.attention_hops, size[1])  # [bsz, hop, len]
         return torch.bmm(alphas, outp), alphas
 
