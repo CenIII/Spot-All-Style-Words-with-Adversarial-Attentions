@@ -136,7 +136,7 @@ class Classifier(nn.Module):
         outp, attention = self.encoder.forward(inp, hidden)
         # outp = outp.view(outp.size(0), -1)
         # fc = self.tanh(self.fc(self.drop(outp)))
-        fc = torch.mean(outp,2)
+        fc = torch.mean(outp,1)
         pred = self.pred(fc)#self.drop(fc))
         if type(self.encoder) == BiLSTM:
             attention = None
