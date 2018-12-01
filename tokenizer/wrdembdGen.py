@@ -39,11 +39,7 @@ wordlist = []
 # 				wordlist += line.split(' ')
 # 				line = f.readline()
 
-dictionary = Dictionary(path='./traindict')
-wordlist += dictionary.idx2word
-dictionary = Dictionary(path='./valdict')
-wordlist += dictionary.idx2word
-dictionary = Dictionary(path='./testdict')
+dictionary = Dictionary(path='./Data/data_clean/dictall')
 wordlist += dictionary.idx2word
 
 wordlist.append('<unk>')
